@@ -20,12 +20,15 @@ namespace AngularToAPI.Controllers
     {
         private readonly ApplicationDb _db;
         private readonly UserManager<ApplicationUser> _manger;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(ApplicationDb db,UserManager<ApplicationUser> manager)
+        public AccountController(ApplicationDb db,UserManager<ApplicationUser> manager , SignInManager<ApplicationUser> signInManager)
         {
             _db = db;
             _manger = manager;
+            _signInManager = signInManager;
         }
+        
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -71,12 +74,10 @@ namespace AngularToAPI.Controllers
             }
             return StatusCode(StatusCodes.Status400BadRequest);
         }
-
         private bool UserNameExist(string username)
         {
             return _db.Users.Any(x => x.UserName == username);
         }
-
         private bool EmailExist(string email)
         {
             return _db.Users.Any(x => x.Email == email);
@@ -95,6 +96,33 @@ namespace AngularToAPI.Controllers
                 return Ok("Registertion Success");
             else
                 return BadRequest(result.Errors);
+        }
+
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            if (model == null)
+                return NotFound();
+            var user = await _manger.FindByEmailAsync(model.Email);
+            if (user == null)
+                return NotFound();
+            if (!user.EmailConfirmed)
+                return Unauthorized("Email not confirmed yet!!");
+            var response = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
+            if (response.Succeeded)
+            {
+                return Ok("Login Success");
+            }
+            else if (response.IsLockedOut)
+            {
+                return Unauthorized("User account is locked");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
         }
     }
 }

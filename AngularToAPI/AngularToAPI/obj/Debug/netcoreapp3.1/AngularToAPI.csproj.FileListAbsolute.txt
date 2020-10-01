@@ -131,3 +131,4 @@ E:\Projects\VS2019\CinemaMovies\AngularToAPI\AngularToAPI\obj\Debug\netcoreapp3.
 E:\Projects\VS2019\CinemaMovies\AngularToAPI\AngularToAPI\obj\Debug\netcoreapp3.1\AngularToAPI.dll
 E:\Projects\VS2019\CinemaMovies\AngularToAPI\AngularToAPI\obj\Debug\netcoreapp3.1\AngularToAPI.pdb
 E:\Projects\VS2019\CinemaMovies\AngularToAPI\AngularToAPI\obj\Debug\netcoreapp3.1\AngularToAPI.genruntimeconfig.cache
+E:\Projects\VS2019\CinemaMovies\AngularToAPI\AngularToAPI\obj\Debug\netcoreapp3.1\AngularToAPI.csprojAssemblyReference.cache
