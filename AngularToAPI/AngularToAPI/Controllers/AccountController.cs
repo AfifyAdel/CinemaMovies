@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Web;
 using AngularToAPI.Models;
 using AngularToAPI.ModelViews;
+using AngularToAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +50,19 @@ namespace AngularToAPI.Controllers
                 var result = await _manger.CreateAsync(newUser,model.Password);
                 if (result.Succeeded)
                 {
-                    return StatusCode(StatusCodes.Status200OK);
+                    //Generate Link
+                    //http://localhost:60761/Account/RegistertionConfirm?ID=449448&Token=hids56sfs
+                    var token = await _manger.GenerateEmailConfirmationTokenAsync(newUser);
+                    var confirmLink = Url.Action("RegistertionConfirm", "Account", new
+                    { ID = newUser.Id, Token = HttpUtility.UrlEncode(token) }, Request.Scheme);
+                    //SendGridAPI
+                    var subject = "Registertion Confirm";
+                    var content = "Please Confirm your registertion in our site";
+                    var htmlContent = "<a href = \"" + confirmLink + "\"> Confirm Registrion</a>";
+                    if(await SendGridAPI.Execute(newUser.Email,newUser.UserName, subject, content, htmlContent))
+                    {
+                        return Ok("Registration Complate");
+                    }
                 }
                 else
                 {
@@ -66,6 +80,21 @@ namespace AngularToAPI.Controllers
         private bool EmailExist(string email)
         {
             return _db.Users.Any(x => x.Email == email);
+        }
+        [HttpGet]
+        [Route("RegistertionConfirm")]
+        public async Task<IActionResult> RegistertionConfirm(string ID,string Token)
+        {
+            if (string.IsNullOrEmpty(ID) || string.IsNullOrEmpty(Token))
+                return NotFound();
+            var user = await _manger.FindByIdAsync(ID);
+            if (user == null)
+                return NotFound();
+            var result = await _manger.ConfirmEmailAsync(user, HttpUtility.UrlDecode(Token));
+            if (result.Succeeded)
+                return Ok("Registertion Success");
+            else
+                return BadRequest(result.Errors);
         }
     }
 }

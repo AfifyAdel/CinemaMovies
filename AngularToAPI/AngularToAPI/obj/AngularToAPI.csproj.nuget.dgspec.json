@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Projects\\VS2019\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj": {}
+    "E:\\Projects\\VS2019\\CinemaMovies\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj": {}
   },
   "projects": {
-    "E:\\Projects\\VS2019\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj": {
+    "E:\\Projects\\VS2019\\CinemaMovies\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Projects\\VS2019\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj",
+        "projectUniqueName": "E:\\Projects\\VS2019\\CinemaMovies\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj",
         "projectName": "AngularToAPI",
-        "projectPath": "E:\\Projects\\VS2019\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj",
+        "projectPath": "E:\\Projects\\VS2019\\CinemaMovies\\AngularToAPI\\AngularToAPI\\AngularToAPI.csproj",
         "packagesPath": "C:\\Users\\afify\\.nuget\\packages\\",
-        "outputPath": "E:\\Projects\\VS2019\\AngularToAPI\\AngularToAPI\\obj\\",
+        "outputPath": "E:\\Projects\\VS2019\\CinemaMovies\\AngularToAPI\\AngularToAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -64,6 +64,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[3.1.8, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.21.0, )"
             }
           },
           "imports": [

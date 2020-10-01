@@ -6,6 +6,7 @@ using AngularToAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,13 +30,14 @@ namespace AngularToAPI
         {
             services.AddControllers();
             services.AddDbContext<ApplicationDb>(option => option.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
-            services.AddIdentity<ApplicationUser, ApplicationRole>(option=> 
+            services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
             {
                 option.Password.RequireDigit = true;
                 option.Password.RequireLowercase = true;
                 option.Password.RequiredUniqueChars = 0;
                 option.Password.RequireUppercase = true;
-            }).AddEntityFrameworkStores<ApplicationDb>();
+            }).AddEntityFrameworkStores<ApplicationDb>().AddDefaultTokenProviders();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
