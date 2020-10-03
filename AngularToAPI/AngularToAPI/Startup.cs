@@ -40,7 +40,8 @@ namespace AngularToAPI
                 option.Lockout.MaxFailedAccessAttempts = 5;
                 option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
             }).AddEntityFrameworkStores<ApplicationDb>().AddDefaultTokenProviders();
-            
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +54,9 @@ namespace AngularToAPI
 
             app.UseHttpsRedirection();
 
-            app.UseRouting(); 
+            app.UseRouting();
+
+            app.UseCors(x => x.WithOrigins("http://localhost:4201").AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 

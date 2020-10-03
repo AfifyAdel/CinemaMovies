@@ -64,7 +64,7 @@ namespace AngularToAPI.Controllers
                     var htmlContent = "<a href = \"" + confirmLink + "\"> Confirm Registrion</a>";
                     if(await SendGridAPI.Execute(newUser.Email,newUser.UserName, subject, content, htmlContent))
                     {
-                        return Ok("Registration Complate");
+                        return StatusCode(StatusCodes.Status200OK);
                     }
                 }
                 else
