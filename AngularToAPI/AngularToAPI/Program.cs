@@ -22,5 +22,6 @@ namespace AngularToAPI
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
     }
 }
