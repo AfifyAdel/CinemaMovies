@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
 
   userForm : FormGroup;
   users:User[];
+  message = '';
 
   messageValidate={
     userName: {
@@ -57,13 +58,14 @@ export class RegisterComponent implements OnInit {
     this.allUsers();
   }
   register(){
-    debugger;
     if(this.userForm.valid){
         this.ValidateRegisterModel();
         if(this.reg.password == this.reg.confirmPassword){
           this.service.Register(this.reg).subscribe(success  => {
             this.allUsers();
-            alert('Registertion Complete');
+            this.userForm.reset();
+            this.userForm.value.password = '';
+            this.message = 'Registration complate successfully. Please check your mail for active account';
           }, err => console.log(err));
       }
     }
@@ -92,7 +94,6 @@ export class RegisterComponent implements OnInit {
 
   allUsers(){
     this.service.GetAllUsers().subscribe(list => {
-      console.log(list);
       this.users = list;
     },err=>alert(err.error())
     );
@@ -100,16 +101,12 @@ export class RegisterComponent implements OnInit {
 
   IsUserNameExist(){
     if(this.userForm.value.userName != '' ){
-      if(this.users.findIndex(x=>x.userName == this.userForm.value.userName) != -1)
+      this.service.UserNameExist(this.userForm.value.userName).subscribe(
+        res=>{
+          console.log(res);
           return true;
-    }
-    return false;
-  }
-
-  IsEmailExist(){
-    if(this.userForm.value.email != '' ){
-      if(this.users.findIndex(x=>x.email == this.userForm.value.email) != -1)
-          return true;
+        },err=>console.log(err)
+      )
     }
     return false;
   }

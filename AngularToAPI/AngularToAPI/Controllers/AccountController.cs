@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace AngularToAPI.Controllers
@@ -40,14 +41,14 @@ namespace AngularToAPI.Controllers
             }
             if (ModelState.IsValid)
             {
-                if (EmailExist(model.Email))
-                {
-                    return BadRequest("Email is used");
-                }
-                if (UserNameExist(model.UserName))
-                {
-                    return BadRequest("Username is used");
-                }
+                //if (EmailExist(model.Email))
+                //{
+                //    return BadRequest("Email is used");
+                //}
+                //if (UserNameExist(model.UserName))
+                //{
+                //    return BadRequest("Username is used");
+                //}
                 var newUser = new ApplicationUser();
                 newUser.Email = model.Email;
                 newUser.UserName = model.UserName;
@@ -75,13 +76,25 @@ namespace AngularToAPI.Controllers
             }
             return StatusCode(StatusCodes.Status400BadRequest);
         }
-        private bool UserNameExist(string username)
+        [HttpGet]
+        [Route("UserNameExist/{username}")]
+        public async Task<ActionResult> UserNameExistAsync(string username)
         {
-            return _db.Users.Any(x => x.UserName == username);
+            var user = await _db.Users.AnyAsync(x => x.UserName == username);
+            if (user)
+                return StatusCode(StatusCodes.Status200OK);
+            else
+                return StatusCode(StatusCodes.Status400BadRequest);
         }
-        private bool EmailExist(string email)
+        [HttpGet]
+        [Route("EmailExist")]
+        public ActionResult EmailExist(string email)
         {
-            return _db.Users.Any(x => x.Email == email);
+            var user = _db.Users.Any(x => x.Email == email);
+            if (user)
+                return StatusCode(StatusCodes.Status200OK);
+            else
+                return StatusCode(StatusCodes.Status400BadRequest);
         }
         [HttpGet]
         [Route("RegistertionConfirm")]
@@ -105,16 +118,16 @@ namespace AngularToAPI.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (model == null)
-                return NotFound();
+                return NotFound("Email or Password is not correct");
             var user = await _manger.FindByEmailAsync(model.Email);
             if (user == null)
-                return NotFound();
+                return NotFound("Email or Password is not correct");
             if (!user.EmailConfirmed)
                 return Unauthorized("Email not confirmed yet!!");
             var response = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
             if (response.Succeeded)
             {
-                return Ok("Login Success");
+                return Ok();
             }
             else if (response.IsLockedOut)
             {
@@ -130,6 +143,24 @@ namespace AngularToAPI.Controllers
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
         {
             return await _db.Users.ToListAsync();
+        }
+
+        private async Task CreateAdmin()
+        {
+            var admin = await _manger.FindByNameAsync("Admin");
+            if (admin == null)
+            {
+                var newUser = new ApplicationUser();
+                newUser.Email = "Admin@Admin.com";
+                newUser.UserName = "Admin";
+                newUser.EmailConfirmed = true;
+
+                var result = await _manger.CreateAsync(newUser, "123#Aa");
+                if (result.Succeeded)
+                {
+                    await _manger.AddToRoleAsync(newUser, "Admin");
+                }
+            }
         }
     }
 }
