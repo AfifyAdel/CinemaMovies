@@ -36,6 +36,7 @@ namespace AngularToAPI
                 option.Password.RequireLowercase = true;
                 option.Password.RequiredUniqueChars = 0;
                 option.Password.RequireUppercase = true;
+                option.Password.RequireNonAlphanumeric = false;
                 option.SignIn.RequireConfirmedEmail = true;
                 option.Lockout.MaxFailedAccessAttempts = 5;
                 option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);

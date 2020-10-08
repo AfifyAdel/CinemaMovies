@@ -10,6 +10,7 @@ using AngularToAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AngularToAPI.Controllers
@@ -123,6 +124,12 @@ namespace AngularToAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status204NoContent);
             }
+        }
+        [HttpGet]
+        [Route("GetAllUsers")]
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+        {
+            return await _db.Users.ToListAsync();
         }
     }
 }
