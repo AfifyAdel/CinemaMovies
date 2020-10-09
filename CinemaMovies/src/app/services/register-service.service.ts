@@ -22,9 +22,15 @@ export class RegisterServiceService {
   Register(reg: RegisterModel): Observable<RegisterModel> {
     return this.http.post<RegisterModel>(this.baseUrl + 'Register', reg, this.headers).pipe();
   }
-  UserNameExist(userName) : Observable<ArrayBuffer> {
-    return this.http.get<ArrayBuffer>(this.baseUrl + 'UserNameExist/' + userName);
+
+
+
+  UserNameExist(userName) {
+    return this.http.get(this.baseUrl + 'UserNameExist/' + userName +'/-2');
   }
+
+
+
 
   emailCheckUnique(email) {
     return this

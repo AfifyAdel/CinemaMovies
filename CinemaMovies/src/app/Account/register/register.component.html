@@ -9,12 +9,12 @@
       </button>
       {{message}}
     </div>
-    <!-- <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="message != null && message != ''">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
       This username is exist!
-    </div> -->
+    </div>
     <div class="col-md-5">
       <form [formGroup]="userForm" (ngSubmit)="register()">
         <div class="form-group">

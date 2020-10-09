@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginModel } from 'src/app/models/login-model';
+import { AuthService } from 'src/app/services/auth.service';
 import { LoginServiceService } from 'src/app/services/login-service.service';
 
 @Component({
@@ -14,14 +15,15 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private service: LoginServiceService,
-    private router : Router
-    ) { }
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
 
   logModel: LoginModel;
   message: string;
   loginForm: FormGroup;
-  messageValidate= {
+  messageValidate = {
     email: {
       required: '*Email is required',
       notValid: '*Email not valid'
@@ -35,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      remeberme:false
+      remeberme: false
     });
 
     this.logModel = {
@@ -50,8 +52,9 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.ValidateLoginModel();
       this.service.Login(this.logModel).subscribe(success => {
+        this.authService.installStorage(!!this.loginForm.value.remeberme,this.loginForm.value.email);
         this.router.navigate(['home']);
-      }, err => {console.log(err);this.message = err.error;});
+      }, err => { console.log(err); this.message = err.error; });
     }
   }
 

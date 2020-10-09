@@ -58,6 +58,15 @@ export class RegisterComponent implements OnInit {
     this.allUsers();
   }
   register(){
+    // debugger;
+    // if(this.IsUserNameExist()){
+    //   this.message = 'UserName is  exsit';
+    //   return;
+    // }
+    // else {
+    //   this.message = '';
+    // }
+
     if(this.userForm.valid){
         this.ValidateRegisterModel();
         if(this.reg.password == this.reg.confirmPassword){
@@ -95,7 +104,7 @@ export class RegisterComponent implements OnInit {
   allUsers(){
     this.service.GetAllUsers().subscribe(list => {
       this.users = list;
-    },err=>alert(err.error())
+    },err=>{alert(err.error())}
     );
   }
 

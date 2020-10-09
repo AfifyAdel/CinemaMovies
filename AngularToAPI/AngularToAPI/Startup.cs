@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AngularToAPI.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +30,14 @@ namespace AngularToAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+            });
+
+
             services.AddControllers();
             services.AddDbContext<ApplicationDb>(option => option.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
@@ -43,6 +53,22 @@ namespace AngularToAPI
             }).AddEntityFrameworkStores<ApplicationDb>().AddDefaultTokenProviders();
 
             services.AddCors();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+          .AddCookie(options =>
+          {
+              options.Cookie.HttpOnly = true;
+              options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+              options.SlidingExpiration = true;
+              options.LogoutPath = "/Account/Logout";
+              options.Cookie.SameSite = SameSiteMode.Lax;
+              options.Cookie.IsEssential = true;
+          });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,13 +83,15 @@ namespace AngularToAPI
 
             app.UseRouting();
 
-            app.UseCors(x => x.WithOrigins("http://localhost:4201").AllowAnyHeader().AllowAnyMethod());
+            app.UseCors(x => x.WithOrigins("http://localhost:4201").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
-            app.UseAuthorization();
 
 
             app.UseAuthentication();
 
+            app.UseCookiePolicy();
+
+            app.UseAuthorization();
 
 
             app.UseEndpoints(endpoints =>
