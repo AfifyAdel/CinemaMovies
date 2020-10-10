@@ -9,12 +9,6 @@
       </button>
       {{message}}
     </div>
-    <!-- <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      This username is exist!
-    </div> -->
     <div class="col-md-5">
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <div class="form-group">
@@ -56,5 +50,8 @@
   </div>
   <div class="btn-login mt-3 ml-3">
     I don't have account <a href="register" class="">Register</a>
+    <div>
+      <a href="#">Forget Password?</a>
+    </div>
   </div>
 </div>

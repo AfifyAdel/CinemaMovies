@@ -12,19 +12,21 @@ import { RegisterServiceService } from 'src/app/services/register-service.servic
 export class RegisterComponent implements OnInit {
   constructor(private fb : FormBuilder , private service: RegisterServiceService) { }
 
+
   userForm : FormGroup;
-  users:User[];
+  reg: RegisterModel;
   message = '';
+  isbussy :  boolean;
 
   messageValidate={
     userName: {
       required:'*Username is required',
-      userNameExist:'*UserName is used'
+      userNameExist:''
     },
     email: {
       required:'*Email is required',
       notValid:'*Email not valid',
-      emailExist:'*Email is used'
+      emailExist:''
     },
     password: {
       required:'*Password is required',
@@ -36,10 +38,10 @@ export class RegisterComponent implements OnInit {
       notMatch: '*The password and confirmation password do not match.'
     }
   }
-  reg: RegisterModel;
 
 
   ngOnInit(): void {
+    this.isbussy  = false;
     this.userForm = this.fb.group({
       userName:['',Validators.required],
       email:['',[Validators.required,Validators.email]],
@@ -53,9 +55,11 @@ export class RegisterComponent implements OnInit {
       password :'',
       confirmPassword:''
     };
-
-    this.users = [];
-    this.allUsers();
+    this.userForm.valueChanges.subscribe(x=>{
+        if(this.userForm.status == 'VALID'){
+          this.isbussy = true;
+        }
+    },err=>console.log(err));
   }
   register(){
     // debugger;
@@ -71,7 +75,6 @@ export class RegisterComponent implements OnInit {
         this.ValidateRegisterModel();
         if(this.reg.password == this.reg.confirmPassword){
           this.service.Register(this.reg).subscribe(success  => {
-            this.allUsers();
             this.userForm.reset();
             this.userForm.value.password = '';
             this.message = 'Registration complate successfully. Please check your mail for active account';
@@ -101,21 +104,31 @@ export class RegisterComponent implements OnInit {
     return false;
   }
 
-  allUsers(){
-    this.service.GetAllUsers().subscribe(list => {
-      this.users = list;
-    },err=>{alert(err.error())}
-    );
-  }
 
   IsUserNameExist(){
-    if(this.userForm.value.userName != '' ){
+    const name = this.userForm.value.userName;
+    if(name != null && name != '' && this.isbussy === false ){
       this.service.UserNameExist(this.userForm.value.userName).subscribe(
         res=>{
-          console.log(res);
-          return true;
-        },err=>console.log(err)
-      )
+          this.messageValidate.userName.userNameExist = '*Username is used';
+        },err=>console.log(err));
+    }
+    else {
+      this.messageValidate.userName.userNameExist = null;
+    }
+    return false;
+  }
+
+  IsEmailExist(){
+    const email = this.userForm.value.email;
+    if(email != null && email != '' && this.isbussy === false ){
+      this.service.EmailExist(this.userForm.value.email).subscribe(
+        res=>{
+          this.messageValidate.email.emailExist = '*Email is used';
+        },err=>console.log(err));
+    }
+    else {
+      this.messageValidate.email.emailExist = null;
     }
     return false;
   }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using AngularToAPI.Models;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
@@ -49,14 +51,6 @@ namespace AngularToAPI.Controllers
             }
             if (ModelState.IsValid)
             {
-                //if (EmailExist(model.Email))
-                //{
-                //    return BadRequest("Email is used");
-                //}
-                //if (UserNameExist(model.UserName))
-                //{
-                //    return BadRequest("Username is used");
-                //}
                 var newUser = new ApplicationUser();
                 newUser.Email = model.Email;
                 newUser.UserName = model.UserName;
@@ -66,8 +60,12 @@ namespace AngularToAPI.Controllers
                     //Generate Link
                     //http://localhost:60761/Account/RegistertionConfirm?ID=449448&Token=hids56sfs
                     var token = await _manger.GenerateEmailConfirmationTokenAsync(newUser);
-                    var confirmLink = Url.Action("RegistertionConfirm", "Account", new
+                    var confirmLinkAsp = Url.Action("RegistertionConfirm", "Account", new
                     { ID = newUser.Id, Token = HttpUtility.UrlEncode(token) }, Request.Scheme);
+
+                    var encodeToken = Encoding.UTF8.GetBytes(token);
+                    var newToken = WebEncoders.Base64UrlEncode(encodeToken);
+                    var confirmLink = $"http://localhost:4200/registerconfirm?ID={newUser.Id}&Token={newToken}";
                     //SendGridAPI
                     var subject = "Registertion Confirm";
                     var content = "Please Confirm your registertion in our site";
@@ -85,11 +83,9 @@ namespace AngularToAPI.Controllers
             return StatusCode(StatusCodes.Status400BadRequest);
         }
 
-
-
         [HttpGet]
-        [Route("UserNameExist/{username}/{id}")]
-        public async Task<ActionResult> UserNameExistAsync(string username,int id)
+        [Route("UserNameExist/{username}")]
+        public async Task<ActionResult> UserNameExistAsync(string username)
         {
             var user = await _db.Users.AnyAsync(x => x.UserName == username);
             if (user)
@@ -97,8 +93,6 @@ namespace AngularToAPI.Controllers
             else
                 return StatusCode(StatusCodes.Status400BadRequest);
         }
-
-
 
         [HttpGet]
         [Route("EmailExist")]
@@ -110,6 +104,7 @@ namespace AngularToAPI.Controllers
             else
                 return StatusCode(StatusCodes.Status400BadRequest);
         }
+
         [HttpGet]
         [Route("RegistertionConfirm")]
         public async Task<IActionResult> RegistertionConfirm(string ID, string Token)
@@ -119,9 +114,14 @@ namespace AngularToAPI.Controllers
             var user = await _manger.FindByIdAsync(ID);
             if (user == null)
                 return NotFound();
-            var result = await _manger.ConfirmEmailAsync(user, HttpUtility.UrlDecode(Token));
+
+            var newToken = WebEncoders.Base64UrlDecode(Token);
+            var encodeToken = Encoding.UTF8.GetString(newToken);
+
+
+            var result = await _manger.ConfirmEmailAsync(user, encodeToken);
             if (result.Succeeded)
-                return Ok("Registertion Success");
+                return Ok();
             else
                 return BadRequest(result.Errors);
         }
@@ -162,14 +162,7 @@ namespace AngularToAPI.Controllers
             }
         }
 
-        private async Task<string> GetRoleNameByUserIdAsync(string id)
-        {
-            var userRole = await _db.UserRoles.FirstOrDefaultAsync(x=>x.UserId==id);
-            if(userRole!=null)
-                return await _db.Roles.Where(x => x.Id == userRole.RoleId).Select(g=>g.Name).FirstOrDefaultAsync();
-            return null;
-        }
-
+      
         [HttpGet]
         [Route("GetRoleName/{email}")]
         public async Task<string> GetRoleName(string email)
@@ -184,12 +177,46 @@ namespace AngularToAPI.Controllers
             return null;
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize]
         [HttpGet]
-        [Route("GetAllUsers")]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+        [Route("CheckUserClaims/{email}/{role}")]
+        public IActionResult CheckUserClaims(string email, string role)
         {
-            return await _db.Users.ToListAsync();
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (userEmail != null && userRole != null)
+            {
+                if (email == userEmail && role == userRole)
+                    return StatusCode(StatusCodes.Status200OK);
+            }
+            return StatusCode(StatusCodes.Status203NonAuthoritative);
+        }
+
+
+        [HttpGet]
+        [Route("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var authProperties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddDays(10)
+            };
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
+            return Ok();
+        }
+
+
+
+
+
+        private async Task<string> GetRoleNameByUserIdAsync(string id)
+        {
+            var userRole = await _db.UserRoles.FirstOrDefaultAsync(x => x.UserId == id);
+            if (userRole != null)
+                return await _db.Roles.Where(x => x.Id == userRole.RoleId).Select(g => g.Name).FirstOrDefaultAsync();
+            return null;
         }
 
         private async Task CreateAdmin()
@@ -210,6 +237,7 @@ namespace AngularToAPI.Controllers
                 }
             }
         }
+
         private async Task CreateRoles()
         {
             if (_roleManager.Roles.Count() < 1)
@@ -274,35 +302,6 @@ namespace AngularToAPI.Controllers
             }
         }
 
-
-        [HttpGet]
-        [Route("Logout")]
-        public async Task<IActionResult> Logout()
-        {
-            var authProperties = new AuthenticationProperties
-            {
-                AllowRefresh = true,
-                IsPersistent = true,
-                ExpiresUtc = DateTime.UtcNow.AddDays(10)
-            };
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
-            return Ok();
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("CheckUserClaims/{email}/{role}")]
-        public IActionResult CheckUserClaims(string email,string role)
-        {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
-            if(userEmail != null && userRole != null)
-            {
-                if (email == userEmail && role == userRole)
-                     return StatusCode(StatusCodes.Status200OK);
-            }
-            return StatusCode(StatusCodes.Status203NonAuthoritative);
-        }
-
+        
     }
 }

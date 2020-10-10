@@ -19,13 +19,15 @@ export class NavMenuComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (localStorage.getItem('email') != null && localStorage.getItem('expire') != null && localStorage.getItem('role') != null) {
-      if (!!this.auth.CheckStorage()) {
+    if (this.IsUserResgistered()) {
+      if(this.auth.IsExpiredDate(this.auth.expire)){
         this.Logout();
       }
+      this.auth.ValidateUser(this.auth.email,this.auth.role).subscribe(success=>{
+        console.log("success");
+      },err=>{console.log(err);this.Logout()});
     }
   }
-
   Logout() {
     this.service.Logout().subscribe(
       res => {

@@ -7,14 +7,24 @@ import { CryptService } from './crypt.service';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private service: CryptService) { }
+   email :string;
+   expire :string;
+   role :string;
+  constructor(private http: HttpClient, private service: CryptService) {
+    if(this.IsUserResgistered()){
+       this.email = this.service.Decrypt(localStorage.getItem('email'));
+       this.expire = this.service.Decrypt(localStorage.getItem('expire'));
+       this.role = this.service.Decrypt(localStorage.getItem('role'));
+    }
+   }
 
   baseUrl = 'http://localhost:60761/Account/';
+
 
   public installStorage(rem: boolean, email: string) {
     const day = new Date();
     if (rem) {
-      day.setDate(day.getDay() + 10);
+      day.setDate(day.getDate() + 10);
     }
     else {
       day.setMinutes(day.getMinutes() + 30);
@@ -27,21 +37,6 @@ export class AuthService {
       }, err => console.log(err));
   }
 
-  CheckStorage() {
-      const email = this.service.Decrypt(localStorage.getItem('email'));
-      const expire = this.service.Decrypt(localStorage.getItem('expire'));
-      const role = this.service.Decrypt(localStorage.getItem('role'));
-      if(email != null && role != null){
-        this.ValidateUser(email,role).subscribe(success=>{
-          if(!this.IsExpiredDate(expire)){
-            console.log(success);
-            return true;
-          }
-        },err=>console.log(err))
-      }
-    return false;
-  }
-
   IsExpiredDate(date:string){
     const dateNow = new Date();
     const expireDate = new Date(Date.parse(date));
@@ -51,6 +46,15 @@ export class AuthService {
     }
     return false;
   }
+
+  IsUserResgistered() {
+    if (localStorage.getItem('email') != null && localStorage.getItem('expire') != null && localStorage.getItem('role') != null) {
+      return true;
+    }
+    return false;
+  }
+
+
   GetRoleName(email) {
     return this.http.get(this.baseUrl + 'GetRoleName/' + email, { responseType: 'text' }).pipe();
   }

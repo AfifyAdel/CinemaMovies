@@ -26,19 +26,20 @@ export class RegisterServiceService {
 
 
   UserNameExist(userName) {
-    return this.http.get(this.baseUrl + 'UserNameExist/' + userName +'/-2');
+    return this.http.get(this.baseUrl + 'UserNameExist/' + userName);
+  }
+
+  EmailExist(email) {
+    return this.http.get(this.baseUrl + 'EmailExist?email=' + email);
   }
 
 
-
-
-  emailCheckUnique(email) {
-    return this
-              .http
-              .get(`${this.baseUrl}/email/${email}`);
-    }
   GetAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl + 'GetAllUsers').pipe();
   }
 
+
+  RegisterConfirmation(id:string,token:string) {
+    return this.http.get(this.baseUrl + 'RegistertionConfirm?ID=' + id + '&Token='  + token, this.headers).pipe();
+  }
 }
