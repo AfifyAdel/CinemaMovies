@@ -158,7 +158,7 @@ namespace AngularToAPI.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status204NoContent);
+                return NotFound("Email or Password is not correct");
             }
         }
 
@@ -206,6 +206,68 @@ namespace AngularToAPI.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, authProperties);
             return Ok();
         }
+
+
+        [HttpGet]
+        [Route("ForgetPassword/{email}")]
+        public async Task<ActionResult> ForgetPasswordAsync(string email)
+        {
+            if (String.IsNullOrEmpty(email))
+            {
+                return NotFound();
+            }
+            var user = await _manger.FindByEmailAsync(email);
+            //Generate Link
+            if (user == null)
+            {
+                return NotFound();
+            }
+            //http://localhost:60761/Account/RegistertionConfirm?ID=449448&Token=hids56sfs
+            var token = await _manger.GeneratePasswordResetTokenAsync(user);
+            var confirmLinkAsp = Url.Action("RegistertionConfirm", "Account", new
+            { ID = user.Id, Token = HttpUtility.UrlEncode(token) }, Request.Scheme);
+
+            var encodeToken = Encoding.UTF8.GetBytes(token);
+            var newToken = WebEncoders.Base64UrlEncode(encodeToken);
+            var confirmLink = $"http://localhost:4200/passwordconfirm?ID={user.Id}&Token={newToken}";
+            //SendGridAPI
+            var subject = "Forget Password";
+            var content = "Please Confirm your password";
+            var htmlContent = "<a href = \"" + confirmLink + "\"> Confirm Password</a>";
+            if (await SendGridAPI.Execute(user.Email, user.UserName, subject, content, htmlContent))
+            {
+                return new ObjectResult(new { token = newToken });
+            }
+            return StatusCode(StatusCodes.Status400BadRequest);
+        }
+
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(model.ID) || string.IsNullOrEmpty(model.Token) || string.IsNullOrEmpty(model.Password))
+                    return NotFound();
+                var user = await _manger.FindByIdAsync(model.ID);
+                if (user == null)
+                    return NotFound();
+
+                var newToken = WebEncoders.Base64UrlDecode(model.Token);
+                var encodeToken = Encoding.UTF8.GetString(newToken);
+
+
+                var result = await _manger.ResetPasswordAsync(user, encodeToken, model.Password);
+                if (result.Succeeded)
+                    return Ok();
+            }
+            return BadRequest();
+        }
+
+
+
+
 
 
 

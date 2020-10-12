@@ -62,15 +62,6 @@ export class RegisterComponent implements OnInit {
     },err=>console.log(err));
   }
   register(){
-    // debugger;
-    // if(this.IsUserNameExist()){
-    //   this.message = 'UserName is  exsit';
-    //   return;
-    // }
-    // else {
-    //   this.message = '';
-    // }
-
     if(this.userForm.valid){
         this.ValidateRegisterModel();
         if(this.reg.password == this.reg.confirmPassword){
