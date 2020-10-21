@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AngularToAPI.Models;
+using AngularToAPI.Models.Admin;
+using AngularToAPI.Repositories.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,20 +14,30 @@ namespace AngularToAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
-        private readonly ApplicationDb _db;
-        public AdminController(ApplicationDb db)
+        private readonly IAdminRepository _repo;
+        public AdminController(IAdminRepository repo)
         {
-            _db = db;
+            _repo = repo;
         }
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("GetAllUsers")]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
         {
-            return await _db.Users.ToListAsync();
+            return await _repo.GetAllUsers(); 
+        }
+        [HttpPost]
+        [Route("AddNewUser")]
+        public async Task<IActionResult> AddNewUser(UserModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _repo.AddUser(model) != null)
+                    return Ok();
+            }
+            return BadRequest();
         }
     }
 }

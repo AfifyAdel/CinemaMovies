@@ -8,5 +8,6 @@ namespace AngularToAPI.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public string Country { get; set; }
     }
 }

@@ -43,4 +43,10 @@ export class NavMenuComponent implements OnInit {
     }
     return false;
   }
+  IsUserAdmin():boolean {
+    if (this.auth.role != null && this.auth.role === "Admin") {
+      return true;
+    }
+    return false;
+  }
 }

@@ -144,7 +144,7 @@ namespace AngularToAPI.Controllers
             if (response.Succeeded)
             {
                 if (await _roleManager.RoleExistsAsync("User"))
-                    if(!await _manger.IsInRoleAsync(user,"User"))
+                    if(!await _manger.IsInRoleAsync(user,"User") && !await _manger.IsInRoleAsync(user, "Admin"))
                         await _manger.AddToRoleAsync(user, "User");
 
                 var roleName = await GetRoleNameByUserIdAsync(user.Id);
@@ -272,7 +272,7 @@ namespace AngularToAPI.Controllers
 
 
 
-
+        #region Private Methods
         private async Task<string> GetRoleNameByUserIdAsync(string id)
         {
             var userRole = await _db.UserRoles.FirstOrDefaultAsync(x => x.UserId == id);
@@ -290,6 +290,7 @@ namespace AngularToAPI.Controllers
                 newUser.Email = "Admin@Admin.com";
                 newUser.UserName = "Admin";
                 newUser.EmailConfirmed = true;
+                newUser.PhoneNumber = "01154854755";
 
                 var result = await _manger.CreateAsync(newUser, "123#Aa");
                 if (result.Succeeded)
@@ -363,7 +364,7 @@ namespace AngularToAPI.Controllers
                 );
             }
         }
+        #endregion
 
-        
     }
 }

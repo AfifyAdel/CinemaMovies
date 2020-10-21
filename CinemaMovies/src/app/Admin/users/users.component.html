@@ -1,0 +1,28 @@
+<div class="">
+  <div>
+    <table class="table table-respone bg-light border">
+      <thead>
+        <tr class="bg-dark text-light">
+          <th>Username</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Country</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of Users">
+          <td scope="row">{{item.userName}}</td>
+          <td>{{item.email}}</td>
+          <td>{{item.phoneNumber}}</td>
+          <td>{{item.country}}</td>
+          <td>
+            <div>
+              <button type="button" class="btn btn-primary btn-sm">Edit</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

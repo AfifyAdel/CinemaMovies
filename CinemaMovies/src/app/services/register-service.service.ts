@@ -23,8 +23,6 @@ export class RegisterServiceService {
     return this.http.post<RegisterModel>(this.baseUrl + 'Register', reg, this.headers).pipe();
   }
 
-
-
   UserNameExist(userName) {
     return this.http.get(this.baseUrl + 'UserNameExist/' + userName);
   }
@@ -32,12 +30,6 @@ export class RegisterServiceService {
   EmailExist(email) {
     return this.http.get(this.baseUrl + 'EmailExist?email=' + email);
   }
-
-
-  GetAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl + 'GetAllUsers').pipe();
-  }
-
 
   RegisterConfirmation(id:string,token:string) {
     return this.http.get(this.baseUrl + 'RegistertionConfirm?ID=' + id + '&Token='  + token, this.headers).pipe();
