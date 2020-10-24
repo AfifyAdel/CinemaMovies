@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
     });
   }
   CheckUser() : boolean{
+    this.IsAddUser = false;
     return this.IsUserList = true;
   }
   CheckAddUser() : boolean{

@@ -21,7 +21,8 @@ const routes: Routes = [
   {path : 'passwordconfirm',component:PasswordconfirmComponent},
   {path : 'controlpanel',component:DashboardComponent},
   {path : 'users',component:UsersComponent},
-  {path : 'adduser',component:AdduserComponent}
+  {path : 'adduser',component:AdduserComponent},
+  {path : 'edituser/:id',component:AdduserComponent}
 ];
 
 @NgModule({

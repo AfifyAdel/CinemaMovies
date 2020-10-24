@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AngularToAPI.Models;
 using AngularToAPI.Models.Admin;
+using AngularToAPI.ModelViews.Admin;
 using AngularToAPI.Repositories.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +36,28 @@ namespace AngularToAPI.Controllers
             if (ModelState.IsValid)
             {
                 if (await _repo.AddUser(model) != null)
+                    return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpGet]
+        [Route("GetUser/{id}")]
+        public async Task<ActionResult<ApplicationUser>> GetUser(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+            var user = await _repo.GetUser(id);
+            if (user != null)
+                return user;
+            return BadRequest();
+        }
+        [HttpPut]
+        [Route("EditUser")]
+        public async Task<ActionResult<ApplicationUser>> EditUser(EditUserModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _repo.EditUser(model) != null)
                     return Ok();
             }
             return BadRequest();
