@@ -14,5 +14,6 @@ namespace AngularToAPI.Repositories.Admin
         Task<ApplicationUser> AddUser(UserModel model);
         Task<ApplicationUser> GetUser(string id);
         Task<ApplicationUser> EditUser(EditUserModel model);
+        Task<bool> DeleteUsers(List<string> ids);
     }
 }

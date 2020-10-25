@@ -87,5 +87,21 @@ namespace AngularToAPI.Repositories.Admin
             
             return user;
         }
+
+        public async Task<bool> DeleteUsers(List<string> ids)
+        {
+            if (ids.Count < 1)
+                return false;
+            foreach (var id in ids)
+            {
+                var user = await _db.Users.FirstOrDefaultAsync(x => x.Id == id);
+                if(user != null)
+                {
+                    await _userManager.DeleteAsync(user);
+                }
+            }
+            await _db.SaveChangesAsync();
+            return true;
+        }
     }
 }

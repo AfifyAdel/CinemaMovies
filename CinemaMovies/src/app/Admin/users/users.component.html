@@ -1,6 +1,6 @@
 <div class="">
   <div>
-    <table class="table table-respone bg-light border">
+    <table id="tbl" class="table table-respone bg-light border">
       <thead>
         <tr class="bg-dark text-light">
           <th>Username</th>
@@ -8,6 +8,9 @@
           <th>Phone Number</th>
           <th>Country</th>
           <th></th>
+          <th>
+            <input type="checkbox" class="ckheader" (change)="SelectAll()">
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -21,8 +24,41 @@
               <button type="button" (click)="EditUser(item.id)" class="btn btn-primary btn-sm">Edit</button>
             </div>
           </td>
+          <td>
+            <input type="checkbox" class="ckitem" value="{{item.id}}">
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger btn-lg float-right" data-toggle="modal" data-target="#modelId" [disabled]="!IsDelete()" >
+      Delete
+    </button>
+  </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Alert Delete!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you want delete this users?
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-danger" (click)="DeleteUsers()">Yes</button>
+        <button id="btnClose" type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
+      </div>
+    </div>
   </div>
 </div>

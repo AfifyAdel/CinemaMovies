@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
       this.ValidateLoginModel();
       this.service.Login(this.logModel).subscribe(success => {
         this.authService.installStorage(!!this.loginForm.value.remeberme,this.loginForm.value.email);
-        this.router.navigate(['home']);
+        this.router.navigate(['home']).then(x=>{window.location.reload()});
       }, err => { console.log(err); this.message = err.error; });
     }
   }

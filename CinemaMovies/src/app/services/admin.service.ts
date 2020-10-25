@@ -36,4 +36,8 @@ export class AdminService {
   EditUser(model: EditUser): Observable<User> {
     return this.http.put<User>(this.baseUrl + 'EditUser', model, this.headers).pipe();
   }
+
+  DeleteUsers(ids: string[]) {
+    return this.http.post(this.baseUrl + 'DeleteUsers', ids, this.headers).pipe();
+  }
 }

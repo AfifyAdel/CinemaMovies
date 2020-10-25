@@ -62,5 +62,16 @@ namespace AngularToAPI.Controllers
             }
             return BadRequest();
         }
+        [HttpPost]
+        [Route("DeleteUsers")]
+        public async Task<IActionResult> DeleteUsers(List<string> ids)
+        {
+            if (ids.Count < 1)
+                return BadRequest();
+
+            if (await _repo.DeleteUsers(ids))
+                return Ok();
+            return BadRequest();
+        }
     }
 }
