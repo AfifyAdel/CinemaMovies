@@ -141,5 +141,42 @@ namespace AngularToAPI.Repositories.Admin
             }
             return usersRoles;
         }
+
+        public async Task<IEnumerable<ApplicationRole>> GetAllRoles()
+        {
+            return await _db.Roles.ToListAsync();
+        }
+
+        public async Task<bool> EditUserRole(string userId, string roleId)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(roleId))
+                return false;
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (user == null)
+                return false;
+
+            var currentUserRoleId = await _db.UserRoles.Where(x => x.UserId == userId).Select(s => s.RoleId).FirstOrDefaultAsync();
+            var currentRole = await _db.Roles.FirstOrDefaultAsync(x => x.Id == currentUserRoleId);
+            if (currentRole == null)
+                return false;
+
+            if (await _userManager.IsInRoleAsync(user, currentRole.Name))
+            {
+                var result = await _userManager.RemoveFromRoleAsync(user, currentRole.Name);
+                if (result.Succeeded)
+                {
+                    var role = await _db.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+                    if (role == null)
+                        return false;
+
+                    var response = await _userManager.AddToRoleAsync(user, role.Name);
+                    if (response.Succeeded)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

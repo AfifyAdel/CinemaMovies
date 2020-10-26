@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminUser } from '../models/adminuser';
 import { EditUser } from '../models/EditUserModel';
+import { RoleModel } from '../models/RoleModel';
 import { User } from '../models/user';
 import { UserRole } from '../models/UserRoleModel';
 
@@ -44,5 +45,13 @@ export class AdminService {
 
   GetUserRoles(): Observable<UserRole[]> {
     return this.http.get<UserRole[]>(this.baseUrl + 'GetUsersRoles', this.headers).pipe();
+  }
+
+  GetAllRoles(): Observable<RoleModel[]> {
+    return this.http.get<RoleModel[]>(this.baseUrl + 'GetAllRoles', this.headers).pipe();
+  }
+
+  EditUserRole(model : UserRole): Observable<UserRole> {
+    return this.http.put<UserRole>(this.baseUrl + 'EditUserRole' , model, this.headers).pipe();
   }
 }

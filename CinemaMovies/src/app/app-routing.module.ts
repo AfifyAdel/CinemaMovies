@@ -13,6 +13,7 @@ import { AdduserComponent } from './Admin/adduser/adduser.component';
 import { AccessdeniedComponent } from './accessdenied/accessdenied.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { DashboardGuardService } from './guards/dashboardGuard.service';
+import { EditUserRoleComponent } from './Admin/EditUserRole/EditUserRole.component';
 
 const routes: Routes = [
   {path : '',component:HomeComponent,pathMatch :'full'},
@@ -27,7 +28,8 @@ const routes: Routes = [
   {path : 'adduser',component:AdduserComponent},
   {path : 'edituser/:id',component:AdduserComponent},
   {path : 'notfound',component:NotfoundComponent},
-  {path : 'accessdenied',component:AccessdeniedComponent}
+  {path : 'accessdenied',component:AccessdeniedComponent},
+  {path : 'edituserrole/:userid/:roleid',component:EditUserRoleComponent}
 ];
 
 @NgModule({

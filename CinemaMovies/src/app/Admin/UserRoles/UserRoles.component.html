@@ -3,7 +3,7 @@
     <thead>
       <tr class="bg-dark text-light">
         <th>Username</th>
-        <th>Role Name</th>
+        <th>Role Type</th>
         <th></th>
       </tr>
     </thead>
@@ -18,7 +18,7 @@
           <input type="hidden" value="{{item.roleId}}">
         </td>
         <td>
-          <button type="button" class="btn btn-primary btn-sm">Edit</button>
+          <button type="button" class="btn btn-primary btn-sm" (click)="EditRole(item.userId,item.roleId)">Edit</button>
         </td>
       </tr>
     </tbody>

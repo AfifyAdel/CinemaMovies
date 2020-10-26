@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="alert alert-primary mt-4" role="alert">
+    <strong>Edit User Role</strong>
+  </div>
+  <div class="col-md-5">
+      <form [formGroup]="userForm" (ngSubmit)="EditRole()">
+        <div class="form-group">
+          <label for="userName">User Name</label>
+          <input type="text" formControlName="userName" class="form-control" id="userName" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="roleName">Role Type</label>
+          <select formControlName="roleName" class="form-control" name="roleName" id="roleName" (change)="OnRoleChange()">
+            <option *ngFor="let item of roles" [value]="item.id">{{item.name}}</option>
+          </select>
+        </div>
+
+
+        <div class="btn-area">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+  </div>
+</div>

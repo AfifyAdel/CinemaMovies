@@ -16,5 +16,7 @@ namespace AngularToAPI.Repositories.Admin
         Task<ApplicationUser> EditUser(EditUserModel model);
         Task<bool> DeleteUsers(List<string> ids);
         Task<IEnumerable<UserRoleModel>> GetUsersRoles();
+        Task<IEnumerable<ApplicationRole>> GetAllRoles();
+        Task<bool> EditUserRole(string userId, string roleId);
     }
 }

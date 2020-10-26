@@ -19,6 +19,8 @@ import { UserRolesComponent } from './Admin/UserRoles/UserRoles.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { AccessdeniedComponent } from './accessdenied/accessdenied.component';
 import { DashboardGuardService } from './guards/dashboardGuard.service';
+import { RoleModel } from './models/RoleModel';
+import { EditUserRoleComponent } from './Admin/EditUserRole/EditUserRole.component';
 
 @NgModule({
   declarations: [
@@ -35,9 +37,10 @@ import { DashboardGuardService } from './guards/dashboardGuard.service';
     UsersComponent,
     AdduserComponent,
     UserRolesComponent,
-      NotfoundComponent,
-      AccessdeniedComponent
-   ],
+    NotfoundComponent,
+    AccessdeniedComponent,
+    EditUserRoleComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

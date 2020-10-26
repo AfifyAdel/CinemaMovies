@@ -23,6 +23,10 @@ export class DashboardComponent implements OnInit {
         $('#sidebar').toggleClass('active');
       });
     });
+    if(sessionStorage.getItem("editUserRole")){
+      this.CheckUserRoles();
+      sessionStorage.removeItem("editUserRole")
+    }
   }
   CheckUser() : boolean{
     this.IsUserRoles = false;
