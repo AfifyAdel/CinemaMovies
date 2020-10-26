@@ -10,6 +10,9 @@ import { PasswordconfirmComponent } from './Account/passwordconfirm/passwordconf
 import { DashboardComponent } from './Admin/Dashboard/Dashboard.component';
 import { UsersComponent } from './Admin/users/users.component';
 import { AdduserComponent } from './Admin/adduser/adduser.component';
+import { AccessdeniedComponent } from './accessdenied/accessdenied.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { DashboardGuardService } from './guards/dashboardGuard.service';
 
 const routes: Routes = [
   {path : '',component:HomeComponent,pathMatch :'full'},
@@ -19,10 +22,12 @@ const routes: Routes = [
   {path : 'registerconfirm',component:RegisterconfirmComponent},
   {path : 'forgetpassword',component:ForgetPasswordComponent},
   {path : 'passwordconfirm',component:PasswordconfirmComponent},
-  {path : 'controlpanel',component:DashboardComponent},
+  {path : 'controlpanel',component:DashboardComponent, canActivate:[DashboardGuardService]},
   {path : 'users',component:UsersComponent},
   {path : 'adduser',component:AdduserComponent},
-  {path : 'edituser/:id',component:AdduserComponent}
+  {path : 'edituser/:id',component:AdduserComponent},
+  {path : 'notfound',component:NotfoundComponent},
+  {path : 'accessdenied',component:AccessdeniedComponent}
 ];
 
 @NgModule({

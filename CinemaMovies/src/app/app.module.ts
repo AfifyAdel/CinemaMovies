@@ -15,6 +15,10 @@ import { PasswordconfirmComponent } from './Account/passwordconfirm/passwordconf
 import { DashboardComponent } from './Admin/Dashboard/Dashboard.component';
 import { UsersComponent } from './Admin/users/users.component';
 import { AdduserComponent } from './Admin/adduser/adduser.component';
+import { UserRolesComponent } from './Admin/UserRoles/UserRoles.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { AccessdeniedComponent } from './accessdenied/accessdenied.component';
+import { DashboardGuardService } from './guards/dashboardGuard.service';
 
 @NgModule({
   declarations: [
@@ -29,15 +33,18 @@ import { AdduserComponent } from './Admin/adduser/adduser.component';
     PasswordconfirmComponent,
     DashboardComponent,
     UsersComponent,
-    AdduserComponent
-  ],
+    AdduserComponent,
+    UserRolesComponent,
+      NotfoundComponent,
+      AccessdeniedComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [DashboardGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

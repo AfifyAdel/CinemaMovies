@@ -1,0 +1,26 @@
+<div class="user-role">
+  <table class="table table-light rounded table-respone bg-light border">
+    <thead>
+      <tr class="bg-dark text-light">
+        <th>Username</th>
+        <th>Role Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of userRoles">
+        <td>
+          {{item.username}}
+          <input type="hidden" value="{{item.userId}}">
+        </td>
+        <td>
+          {{item.roleName}}
+          <input type="hidden" value="{{item.roleId}}">
+        </td>
+        <td>
+          <button type="button" class="btn btn-primary btn-sm">Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -73,5 +73,11 @@ namespace AngularToAPI.Controllers
                 return Ok();
             return BadRequest();
         }
+        [HttpGet]
+        [Route("GetUsersRoles")]
+        public async Task<IEnumerable<UserRoleModel>> GetUsersRoles()
+        {
+            return await _repo.GetUsersRoles();
+        }
     }
 }
