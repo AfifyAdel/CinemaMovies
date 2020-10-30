@@ -18,5 +18,16 @@ namespace AngularToAPI.Repositories.Admin
         Task<IEnumerable<UserRoleModel>> GetUsersRoles();
         Task<IEnumerable<ApplicationRole>> GetAllRoles();
         Task<bool> EditUserRole(string userId, string roleId);
+
+        Task<IEnumerable<Category>> GetAllCategories();
+        Task<Category> AddCategory(Category category);
+        Task<Category> GetCategory(int id);
+        Task<bool> EditCategory(Category category);
+        Task<bool> DeleteCategory(Category category);
+
+        Task<IEnumerable<SubCategory>> GetSubCategoriesAsync();
+        Task<SubCategory> AddSubCategoryAsync(SubCategory subCategory);
+        Task<SubCategory> EditSubCategoryAsync(SubCategory subCategory);
+        Task<bool> DeleteSubCategory(SubCategory subCategory);
     }
 }

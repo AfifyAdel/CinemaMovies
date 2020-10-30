@@ -14,6 +14,9 @@ import { AccessdeniedComponent } from './accessdenied/accessdenied.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { DashboardGuardService } from './guards/dashboardGuard.service';
 import { EditUserRoleComponent } from './Admin/EditUserRole/EditUserRole.component';
+import { AddCategoryComponent } from './Admin/Categories/addCategory/addCategory.component';
+import { CategoryListComponent } from './Admin/Categories/categoryList/categoryList.component';
+import { SubCategoryComponent } from './Admin/SubCategories/sub-category/sub-category.component';
 
 const routes: Routes = [
   {path : '',component:HomeComponent,pathMatch :'full'},
@@ -29,7 +32,11 @@ const routes: Routes = [
   {path : 'edituser/:id',component:AdduserComponent},
   {path : 'notfound',component:NotfoundComponent},
   {path : 'accessdenied',component:AccessdeniedComponent},
-  {path : 'edituserrole/:userid/:roleid',component:EditUserRoleComponent}
+  {path : 'edituserrole/:userid/:roleid',component:EditUserRoleComponent},
+  {path : 'addcategory',component:AddCategoryComponent},
+  {path : 'editcategory/:id',component:AddCategoryComponent},
+  { path: 'subcategory', component: SubCategoryComponent },
+  { path: 'editsubcategory/:id/:id1/:id2', component: SubCategoryComponent }
 ];
 
 @NgModule({

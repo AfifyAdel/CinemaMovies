@@ -21,6 +21,10 @@ import { AccessdeniedComponent } from './accessdenied/accessdenied.component';
 import { DashboardGuardService } from './guards/dashboardGuard.service';
 import { RoleModel } from './models/RoleModel';
 import { EditUserRoleComponent } from './Admin/EditUserRole/EditUserRole.component';
+import { CategoryListComponent } from './Admin/Categories/categoryList/categoryList.component';
+import { AddCategoryComponent } from './Admin/Categories/addCategory/addCategory.component';
+import { SubCategoryComponent } from './Admin/SubCategories/sub-category/sub-category.component';
+import { SubCategoryListComponent } from './Admin/SubCategories/sub-category-list/sub-category-list.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { EditUserRoleComponent } from './Admin/EditUserRole/EditUserRole.compone
     UserRolesComponent,
     NotfoundComponent,
     AccessdeniedComponent,
-    EditUserRoleComponent
+    EditUserRoleComponent,
+    CategoryListComponent,
+    AddCategoryComponent,
+    SubCategoryComponent,
+    SubCategoryListComponent
   ],
   imports: [
     BrowserModule,

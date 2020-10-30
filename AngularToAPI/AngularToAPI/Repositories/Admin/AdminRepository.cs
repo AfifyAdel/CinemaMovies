@@ -178,5 +178,116 @@ namespace AngularToAPI.Repositories.Admin
             }
             return false;
         }
+
+        public async Task<IEnumerable<Category>> GetAllCategories()
+        {
+            return await _db.Categories.ToListAsync();
+        }
+
+        public async Task<Category> AddCategory(Category category)
+        {
+         
+            var newCategory = new Category()
+            {
+                CategoryName = category.CategoryName
+            };
+            _db.Categories.Add(newCategory);
+            await _db.SaveChangesAsync();
+            return newCategory;
+        }
+
+        public async Task<Category> GetCategory(int id)
+        {
+            var category = await _db.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            if (category != null)
+                return category;
+            return null;
+        }
+
+        public async Task<bool> EditCategory(Category category)
+        {
+            if (category == null || string.IsNullOrEmpty(category.CategoryName))
+                return false;
+            var curCategory = await _db.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);
+            if (curCategory == null)
+                return false;
+
+            _db.Categories.Attach(curCategory);
+
+            curCategory.CategoryName = category.CategoryName;
+           
+            _db.Entry(curCategory).Property(x => x.CategoryName).IsModified = true;
+
+            await _db.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteCategory(Category category)
+        {
+            if (category.Id < 0)
+                return false;
+            var currentCategory = await _db.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);
+            if (currentCategory != null)
+            {
+                _db.Categories.Remove(currentCategory);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+        public async Task<IEnumerable<SubCategory>> GetSubCategoriesAsync()
+        {
+            return await _db.SubCategories.Include(x => x.Category).ToListAsync();
+        }
+
+        public async Task<SubCategory> AddSubCategoryAsync(SubCategory model)
+        {
+            var subCategory = new SubCategory
+            {
+                SubCategoryName = model.SubCategoryName,
+                CategoryId = model.CategoryId
+            };
+            _db.SubCategories.Add(subCategory);
+            await _db.SaveChangesAsync();
+            return subCategory;
+        }
+
+        public async Task<SubCategory> EditSubCategoryAsync(SubCategory model)
+        {
+            if (model == null || model.Id < 1)
+            {
+                return null;
+            }
+
+            var subCategory = await _db.SubCategories.FirstOrDefaultAsync(x => x.Id == model.Id);
+            if (subCategory == null)
+            {
+                return null;
+            }
+            _db.SubCategories.Attach(subCategory);
+            subCategory.SubCategoryName = model.SubCategoryName;
+            subCategory.CategoryId = model.CategoryId;
+
+            _db.Entry(subCategory).Property(x => x.SubCategoryName).IsModified = true;
+            _db.Entry(subCategory).Property(x => x.CategoryId).IsModified = true;
+
+            await _db.SaveChangesAsync();
+            return subCategory;
+        }
+        public async Task<bool> DeleteSubCategory(SubCategory subCategory)
+        {
+            if (subCategory.Id < 0)
+                return false;
+            var currentSubCategory = await _db.SubCategories.FirstOrDefaultAsync(x => x.Id == subCategory.Id);
+            if (currentSubCategory != null)
+            {
+                _db.SubCategories.Remove(currentSubCategory);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
     }
 }

@@ -1,9 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CategoryListComponent } from '../Admin/Categories/categoryList/categoryList.component';
 import { AdminUser } from '../models/adminuser';
+import { Category } from '../models/CategoryModel';
 import { EditUser } from '../models/EditUserModel';
 import { RoleModel } from '../models/RoleModel';
+import { SubCategory } from '../models/SubCategory';
 import { User } from '../models/user';
 import { UserRole } from '../models/UserRoleModel';
 
@@ -53,5 +56,41 @@ export class AdminService {
 
   EditUserRole(model : UserRole): Observable<UserRole> {
     return this.http.put<UserRole>(this.baseUrl + 'EditUserRole' , model, this.headers).pipe();
+  }
+
+  GetAllCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.baseUrl + 'GetAllCategories', this.headers).pipe();
+  }
+
+  AddCategory(category: Category): Observable<Category> {
+    return this.http.post<Category>(this.baseUrl + 'AddCategory', category, this.headers).pipe();
+  }
+
+  EditCategory(category: Category): Observable<Category> {
+    return this.http.put<Category>(this.baseUrl + 'EditCategory', category, this.headers).pipe();
+  }
+
+  DeleteCategory(category: Category) {
+    return this.http.post(this.baseUrl + 'DeleteCategory', category, this.headers).pipe();
+  }
+
+  GetCategory(id : string): Observable<Category> {
+    return this.http.get<Category>(this.baseUrl + 'GetCategory/' + id, this.headers).pipe();
+  }
+
+  GetAllSubCategories(): Observable<SubCategory[]> {
+    return this.http.get<SubCategory[]>(this.baseUrl + 'GetSubCategories', this.headers).pipe();
+  }
+
+  AddSubCategory(model: SubCategory): Observable<SubCategory> {
+    return this.http.post<SubCategory>(this.baseUrl + 'AddSubCategory', model, this.headers).pipe();
+  }
+
+  EditSubCategory(model: SubCategory): Observable<SubCategory> {
+    return this.http.put<SubCategory>(this.baseUrl + 'EditSubCategory', model, this.headers).pipe();
+  }
+
+  DeleteSubCategory(model: SubCategory) {
+    return this.http.post(this.baseUrl + 'DeleteSubCategory', model, this.headers).pipe();
   }
 }

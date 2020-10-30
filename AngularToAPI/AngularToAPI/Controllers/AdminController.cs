@@ -99,5 +99,117 @@ namespace AngularToAPI.Controllers
                 return Ok();
             return BadRequest();
         }
+
+        [HttpGet]
+        [Route("GetAllCategories")]
+        public async Task<IEnumerable<Category>> GetAllCategories()
+        {
+            return await _repo.GetAllCategories();
+        }
+
+        [HttpPost]
+        [Route("AddCategory")]
+        public async Task<IActionResult> AddCategory(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(category.CategoryName))
+                    return BadRequest();
+
+                if (await _repo.AddCategory(category) != null)
+                    return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("GetCategory/{id}")]
+        public async Task<ActionResult<Category>> GetCategory(string id)
+        {
+            var category = await _repo.GetCategory(int.Parse(id));
+            if (category != null)
+                return category;
+            return BadRequest();
+        }
+
+        [HttpPut]
+        [Route("EditCategory")]
+        public async Task<ActionResult<Category>> EditCategory(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _repo.EditCategory(category))
+                    return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("DeleteCategory")]
+        public async Task<IActionResult> DeleteCategory(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _repo.DeleteCategory(category))
+                    return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("GetSubCategories")]
+        public async Task<IEnumerable<SubCategory>> GetSubCategories()
+        {
+            return await _repo.GetSubCategoriesAsync();
+        }
+
+        [HttpPost]
+        [Route("AddSubCategory")]
+        public async Task<IActionResult> AddSubCategory(SubCategory model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            var cat = await _repo.AddSubCategoryAsync(model);
+            if (cat != null)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpPut]
+        [Route("EditSubCategory")]
+        public async Task<IActionResult> EditSubCategory(SubCategory model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            var cat = await _repo.EditSubCategoryAsync(model);
+            if (cat != null)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("DeleteSubCategory")]
+        public async Task<IActionResult> DeleteSubCategory(SubCategory model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _repo.DeleteSubCategory(model);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

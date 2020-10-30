@@ -1,0 +1,29 @@
+<div class="container mt-4 mb-4">
+  <h5>{{title}}</h5>
+  <hr class="mb-4" />
+  <button type="button" class="btn btn-primary mb-4" (click)="GoToCategories()">Back to categories</button>
+  <div class="login container">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="message != null && message != ''">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+      </button>
+      {{message}}
+    </div>
+    <div class="col-md-5">
+      <form [formGroup]="catForm" (ngSubmit)="AddCategory()">
+        <div class="form-group">
+          <label for="categoryName">Category Name</label>
+          <input type="text" formControlName="categoryName" class="form-control" id="categoryName" placeholder="Category Name"
+            [ngClass]="{'is-invalid' : this.catForm.get('categoryName').touched && !this.catForm.get('categoryName').valid}">
+        </div>
+
+        <button type="submit" class="btn btn-primary"
+          [disabled]="catForm.invalid">{{btnTitle}}</button>
+        <script>
+          $(".alert").alert();
+        </script>
+      </form>
+    </div>
+  </div>
+</div>
