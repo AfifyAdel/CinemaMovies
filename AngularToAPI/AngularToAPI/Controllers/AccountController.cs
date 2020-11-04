@@ -60,8 +60,8 @@ namespace AngularToAPI.Controllers
                     //Generate Link
                     //http://localhost:60761/Account/RegistertionConfirm?ID=449448&Token=hids56sfs
                     var token = await _manger.GenerateEmailConfirmationTokenAsync(newUser);
-                    var confirmLinkAsp = Url.Action("RegistertionConfirm", "Account", new
-                    { ID = newUser.Id, Token = HttpUtility.UrlEncode(token) }, Request.Scheme);
+                    //var confirmLinkAsp = Url.Action("RegistertionConfirm", "Account", new
+                    //{ ID = newUser.Id, Token = HttpUtility.UrlEncode(token) }, Request.Scheme);
 
                     var encodeToken = Encoding.UTF8.GetBytes(token);
                     var newToken = WebEncoders.Base64UrlEncode(encodeToken);
@@ -81,28 +81,6 @@ namespace AngularToAPI.Controllers
                 }
             }
             return StatusCode(StatusCodes.Status400BadRequest);
-        }
-
-        [HttpGet]
-        [Route("UserNameExist/{username}")]
-        public async Task<ActionResult> UserNameExistAsync(string username)
-        {
-            var user = await _db.Users.AnyAsync(x => x.UserName == username);
-            if (user)
-                return StatusCode(StatusCodes.Status200OK);
-            else
-                return StatusCode(StatusCodes.Status400BadRequest);
-        }
-
-        [HttpGet]
-        [Route("EmailExist")]
-        public ActionResult EmailExist(string email)
-        {
-            var user = _db.Users.Any(x => x.Email == email);
-            if (user)
-                return StatusCode(StatusCodes.Status200OK);
-            else
-                return StatusCode(StatusCodes.Status400BadRequest);
         }
 
         [HttpGet]
@@ -126,6 +104,27 @@ namespace AngularToAPI.Controllers
                 return BadRequest(result.Errors);
         }
 
+        [HttpGet]
+        [Route("UserNameExist/{username}")]
+        public async Task<ActionResult> UserNameExistAsync(string username)
+        {
+            var user = await _db.Users.AnyAsync(x => x.UserName == username);
+            if (user)
+                return StatusCode(StatusCodes.Status200OK);
+            else
+                return StatusCode(StatusCodes.Status400BadRequest);
+        }
+
+        [HttpGet]
+        [Route("EmailExist")]
+        public ActionResult EmailExist(string email)
+        {
+            var user = _db.Users.Any(x => x.Email == email);
+            if (user)
+                return StatusCode(StatusCodes.Status200OK);
+            else
+                return StatusCode(StatusCodes.Status400BadRequest);
+        }
 
         [HttpPost]
         [Route("Login")]
@@ -224,8 +223,8 @@ namespace AngularToAPI.Controllers
             }
             //http://localhost:60761/Account/RegistertionConfirm?ID=449448&Token=hids56sfs
             var token = await _manger.GeneratePasswordResetTokenAsync(user);
-            var confirmLinkAsp = Url.Action("RegistertionConfirm", "Account", new
-            { ID = user.Id, Token = HttpUtility.UrlEncode(token) }, Request.Scheme);
+            //var confirmLinkAsp = Url.Action("RegistertionConfirm", "Account", new
+            //{ ID = user.Id, Token = HttpUtility.UrlEncode(token) }, Request.Scheme);
 
             var encodeToken = Encoding.UTF8.GetBytes(token);
             var newToken = WebEncoders.Base64UrlEncode(encodeToken);

@@ -9,12 +9,6 @@
       </button>
       {{message}}
     </div>
-    <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="message != null && message != ''">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      This username is exist!
-    </div>
     <div class="col-md-5">
       <form [formGroup]="userForm" (ngSubmit)="register()">
         <div class="form-group">
@@ -82,14 +76,15 @@
         </div>
 
         <button type="submit" class="btn btn-primary"
-          [disabled]="userForm.invalid || IsPasswordMatch() || !IsPasswordValid()">Submit</button>
+          [disabled]="userForm.invalid || IsPasswordMatch() || !IsPasswordValid() || btnClick">
+          <span *ngIf="btnClick" class="spinner-border spinner-border-sm">  </span> Submit</button>
         <script>
           $(".alert").alert();
         </script>
       </form>
     </div>
   </div>
-  <div class="btn-login mt-3 ml-3">
+  <div class="btn-login mt-3 ml-3" style="color: white;">
     I have account <a href="login" class="">Login</a>
   </div>
 </div>

@@ -41,14 +41,15 @@
           <label for="remeberme">Remeber Me</label>
         </div>
         <button type="submit" class="btn btn-primary"
-          [disabled]="loginForm.invalid || !IsPasswordValid()">Login</button>
+          [disabled]="loginForm.invalid || !IsPasswordValid() || btnClick">
+          <span *ngIf="btnClick" class="spinner-border spinner-border-sm">  </span> Login</button>
         <script>
           $(".alert").alert();
         </script>
       </form>
     </div>
   </div>
-  <div class="btn-login mt-3 ml-3">
+  <div class="btn-login mt-3 ml-3" style="color: white;">
     I don't have account <a href="register" class="">Register</a>
     <div>
       <a href="forgetpassword">Forget Password?</a>

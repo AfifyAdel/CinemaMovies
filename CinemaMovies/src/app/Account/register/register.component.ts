@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   reg: RegisterModel;
   message = '';
   isbussy :  boolean;
+  btnClick : boolean;
 
   messageValidate={
     userName: {
@@ -41,6 +42,7 @@ export class RegisterComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.btnClick = false;
     this.isbussy  = false;
     this.userForm = this.fb.group({
       userName:['',Validators.required],
@@ -62,14 +64,16 @@ export class RegisterComponent implements OnInit {
     },err=>console.log(err));
   }
   register(){
+    this.btnClick = true;
     if(this.userForm.valid){
         this.ValidateRegisterModel();
         if(this.reg.password == this.reg.confirmPassword){
           this.service.Register(this.reg).subscribe(success  => {
             this.userForm.reset();
             this.userForm.value.password = '';
-            this.message = 'Registration complate successfully. Please check your mail for active account';
-          }, err => console.log(err));
+            this.message = 'Registration complate successfully. Please check your E-mail for active account';
+            this.btnClick = false;
+          }, err => {console.log(err);this.btnClick = false;});
       }
     }
   }
@@ -89,7 +93,7 @@ export class RegisterComponent implements OnInit {
   IsPasswordValid(){
     const pass = this.userForm.value.password;
     var passw=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-    if(pass.match(passw)){
+    if(pass !== null && pass!=='' && pass.match(passw)){
       return true;
     }
     return false;

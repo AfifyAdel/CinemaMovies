@@ -1,0 +1,25 @@
+.table-responsive
+{
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-color: transparent;
+}
+.card{
+  cursor: pointer;
+  color: white;
+  background: radial-gradient(black, transparent);
+}
+.card-img-top{
+  width: 100%;
+  height: 350px;
+}
+
+.center {
+  margin: auto;
+  width: 60%;
+}
+
+.btn{
+  min-width: fit-content;
+}

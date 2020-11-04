@@ -4,46 +4,45 @@
     <div class="sidebar-header">
       <h3>Admin Tool</h3>
     </div>
-
-    <ul class="list-unstyled components">
-      <p></p>
-      <li class="active">
-        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Users</a>
-        <ul class="collapse list-unstyled" id="homeSubmenu">
-          <li>
-            <a (click)="CheckUser()">Users List</a>
-          </li>
-          <li>
-            <a (click)="CheckUserRoles()">Users Roles</a>
-          </li>
-        </ul>
-      </li>
-      <li class="active">
-        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Categories</a>
-        <ul class="collapse list-unstyled" id="pageSubmenu">
-          <li>
-            <a (click)="CheckCategories()">Category List</a>
-          </li>
-        </ul>
-      </li>
-      <li class="active">
-        <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">SubCategories</a>
-        <ul class="collapse list-unstyled" id="pageSubmenu1">
-          <li>
-            <a (click)="CheckSubCategories()">SubCategory List</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-
-    <ul class="list-unstyled CTAs">
-      <li>
-        <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
-      </li>
-      <li>
-        <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
-      </li>
-    </ul>
+    <div>
+      <ul class="list-unstyled components">
+        <li class="active">
+          <a href="#homeSubmenu"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Users</a>
+          <ul class="collapse list-unstyled" id="homeSubmenu">
+            <li>
+              <a (click)="CheckUser()" >Users List</a>
+            </li>
+            <li>
+              <a (click)="CheckUserRoles()">Users Roles</a>
+            </li>
+          </ul>
+        </li>
+        <li class="active">
+          <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Categories</a>
+          <ul class="collapse list-unstyled" id="pageSubmenu">
+            <li>
+              <a (click)="CheckCategories()">Category List</a>
+            </li>
+          </ul>
+        </li>
+        <li class="active">
+          <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">SubCategories</a>
+          <ul class="collapse list-unstyled" id="pageSubmenu1">
+            <li>
+              <a (click)="CheckSubCategories()">SubCategory List</a>
+            </li>
+          </ul>
+        </li>
+        <li class="active">
+          <a href="#submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Movies</a>
+          <ul class="collapse list-unstyled" id="submenu">
+            <li>
+              <a (click)="CheckUser()">Movie List</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </nav>
 
   <!-- Page Content  -->

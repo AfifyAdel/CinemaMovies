@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   logModel: LoginModel;
   message: string;
   loginForm: FormGroup;
+  btnClick : boolean;
   messageValidate = {
     email: {
       required: '*Email is required',
@@ -33,6 +34,7 @@ export class LoginComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    this.btnClick = false;
     this.message = '';
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -49,12 +51,13 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.btnClick = true;
     if (this.loginForm.valid) {
       this.ValidateLoginModel();
       this.service.Login(this.logModel).subscribe(success => {
         this.authService.installStorage(!!this.loginForm.value.remeberme,this.loginForm.value.email);
         this.router.navigate(['home']).then(x=>{window.location.reload()});
-      }, err => { console.log(err); this.message = err.error; });
+      }, err => { console.log(err); this.message = err.error;this.btnClick = false; });
     }
   }
 
