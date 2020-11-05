@@ -9,10 +9,11 @@
   cursor: pointer;
   color: white;
   background: radial-gradient(black, transparent);
+  margin-bottom: 10px;
 }
 .card-img-top{
   width: 100%;
-  height: 350px;
+  height: 200px;
 }
 
 .center {
@@ -22,4 +23,14 @@
 
 .btn{
   min-width: fit-content;
+}
+
+
+.fixed-size {
+  width: 110px;
+}
+
+.card-text{
+  overflow: hidden;
+  height: 70px;
 }

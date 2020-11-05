@@ -1,6 +1,7 @@
 body{
   background-color: currentColor;
   min-width: fit-content;
+  overflow-x: hidden;
 }
 label {
   color: white;
